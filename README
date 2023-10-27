@@ -1,0 +1,96 @@
+# README
+
+This project uses the Python programming language and several machine learning libraries to predict loan status ("low_risk" or "high_risk") based on historical lending data. It employs a logistic regression model and oversampling to handle imbalanced classes in the dataset.
+
+## Getting Started
+
+The script starts by importing the necessary modules:
+
+```python
+import numpy as np
+import pandas as pd
+from pathlib import Path
+from sklearn.metrics import balanced_accuracy_score, confusion_matrix, classification_report
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from imblearn.over_sampling import RandomOverSampler
+from sklearn.preprocessing import StandardScaler
+import hvplot.pandas
+```
+
+The historical lending data is read from a CSV file into a pandas DataFrame:
+
+```python
+data = Path('Resources/lending_data.csv')
+df = pd.read_csv(data)
+```
+
+## Preprocessing
+
+The data is separated into features and target. The target is the "loan_status" column, while the features are all other columns:
+
+```python
+y = df["loan_status"]
+X = df.drop(columns="loan_status")
+```
+
+The data is then split into a training set and a testing set:
+
+```python
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=1)
+```
+
+## Logistic Regression Model
+
+A Logistic Regression model is created and fitted using the training data:
+
+```python
+regression = LogisticRegression(solver= 'lbfgs', random_state=1)
+regression.fit(X_train, y_train)
+```
+
+Predictions are made using the testing data:
+
+```python
+y_prediction = regression.predict(X_test)
+```
+
+The balanced accuracy score, confusion matrix, and classification report are then generated for these predictions:
+
+```python
+y_pred_accur_score= balanced_accuracy_score(y_test, y_prediction)
+matrix = confusion_matrix(y_test, y_prediction)
+report = classification_report(y_test, y_prediction)
+```
+
+## Oversampling
+
+The RandomOverSampler model is used to oversample the minority class in the training data to balance the classes:
+
+```python
+oversampler = RandomOverSampler(random_state=1)
+X_resampled, y_resampled = oversampler.fit_resample(X_train, y_train)
+```
+
+A new Logistic Regression model is created and fitted using the resampled training data:
+
+```python
+model = LogisticRegression(solver= 'lbfgs', random_state=1)
+model.fit(X_resampled, y_resampled)
+```
+
+Predictions are again made using the testing data:
+
+```python
+prediction = model.predict(X_test)
+```
+
+Finally, the balanced accuracy score, confusion matrix, and classification report are generated for the new predictions:
+
+```python
+balanced_accuracy = balanced_accuracy_score(y_test, prediction)
+matrix =confusion_matrix(y_test, prediction)
+report = classification_report(y_test, prediction)
+```
+
+This script demonstrates the use of logistic regression and oversampling to predict loan status based on historical lending data [Source 7](https://www.datacamp
