@@ -44,7 +44,9 @@ Model 1: At 0.99% accuracy, the linear regression model demonstrates to be an ac
 
 Model 2: After balancing the data and completing another linear regression, all numbers were identical to the first model in the classification report and balanced average. This, too, appears to be an excellent model.
 
-It is noted, however, that the two models produced different rates of false positive and false negative which could be used to make a final determination in which model to employ.
+It is noted, however, that the two models produced different rates of false positive and false negative which could be used to make a final determination in which model to employ. Model 1 demonstrated more false negative and Model 2 returned more false positives.
+
+The best model would be determined by the end user's risk tolerence to false positive or false negative results,
 
 ## Reproducibility
 To reproduce the results of this project, simply run the `credit_risk_classification.ipynb` script provided in the repository. Make sure you have the required dependencies installed (see Installation section). The script will load the data, perform data pre-processing, train the model, and display the results.
