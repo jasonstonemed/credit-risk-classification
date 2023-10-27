@@ -1,8 +1,8 @@
-# README
+# README for Credit Risk Classification Project
 
-This project uses the Python programming language and several machine learning libraries to predict loan status ("low_risk" or "high_risk") based on historical lending data. It employs a logistic regression model and oversampling to handle imbalanced classes in the dataset.
+This project aims to build supervised machine learning models to predict credit risk. The data provides information on loan size, interest rate, borrower income, debt to income ratio, number of accounts, derogatory marks, and loan status. Loan status is designated by ‘0’ (low risk) and ‘1’ (high risk). The goal is to predict loan risk using machine learning techniques.
 
-## Getting Started
+## Installation
 
 The script starts by importing the necessary modules:
 
@@ -18,31 +18,44 @@ from sklearn.preprocessing import StandardScaler
 import hvplot.pandas
 ```
 
-The historical lending data is read from a CSV file into a pandas DataFrame:
+You can install these dependencies using pip:
+
+```bash
+pip install NumPy pandas scikit-learn matplotlib
+```
+
+## Data
+
+The dataset used for this project is stored in the `Resources’ folder. It consists of a CSV file named `lending_data’:
 
 ```python
 data = Path('Resources/lending_data.csv')
 df = pd.read_csv(data)
 ```
 
-## Preprocessing
+The file contains the following columns, in order:
 
-The data is separated into features and target. The target is the "loan_status" column, while the features are all other columns:
+1. Loan Size: The size of the loan in whole US dollars.
+2. Interest Rate: The interest rate for the loan in percent.
+3. Borrower Income: The annual income of the borrower in whole US dollars.
+4. Debt to Income Ratio: The borrower's monthly debt divided by gross monthly income.
+5. Number of Accounts: The number of credit and revolving credit accounts the borrower has.
+6. Derogatory Marks: Negative marks on the borrower's credit report, such as late payments or bankruptcies.
+7. Loan Status: The risk status of the loan. '0' is labeled low-risk and '1' is labeled high-risk.
 
-```python
-y = df["loan_status"]
-X = df.drop(columns="loan_status")
-```
+## Data Pre-processing
 
-The data is then split into a training set and a testing set:
+Prior to model training, we perform the following data pre-processing steps:
 
-```python
-X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=1)
-```
+- Handling missing values: not necessary; code was curated for class use
+- Encoding categorical variables: All values were numerical
+- Splitting the data: We split the dataset into training and testing sets to evaluate the model's performance.
 
-## Logistic Regression Model
+## Model Training
 
-A Logistic Regression model is created and fitted using the training data:
+Two supervised machine learning models were created. 
+
+The first model was using the LogisticRegression method on the original data:
 
 ```python
 regression = LogisticRegression(solver= 'lbfgs', random_state=1)
@@ -63,9 +76,7 @@ matrix = confusion_matrix(y_test, y_prediction)
 report = classification_report(y_test, y_prediction)
 ```
 
-## Oversampling
-
-The RandomOverSampler model is used to oversample the minority class in the training data to balance the classes:
+The data was then resampled using RandomOverSampler to balance the data, then created a second LogisticRegression model:
 
 ```python
 oversampler = RandomOverSampler(random_state=1)
@@ -92,5 +103,17 @@ balanced_accuracy = balanced_accuracy_score(y_test, prediction)
 matrix =confusion_matrix(y_test, prediction)
 report = classification_report(y_test, prediction)
 ```
+
+## Results and Visualizations
+
+Model 1: At 0.99% accuracy, the linear regression model demonstrates to be an accurate model when predicting high-risk loans; balanced accuracy was 0.95. The classification report looks excellent at 1.00 Precision and 0.99 Recall. In sum, the model appears to be an excellent predictor of high-risk loan categories. 
+
+Model 2: After balancing the data and completing another linear regression, all numbers were identical to the first model in the classification report and balanced average. This, too, appears to be an excellent model.
+
+It is noted, however, that the two models produced different rates of false positive and false negative which could be used to make a final determination in which model to employ. Model 1 demonstrated more false negative and Model 2 returned more false positives.
+
+The best model would be determined by the end user's risk tolerance to false positive or false negative results.
+
+Credit to Phind.com for assistance with the README
 
 Credit to Phind.com for assistance with the README
